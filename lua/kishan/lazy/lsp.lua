@@ -28,20 +28,37 @@ return {
         require("mason").setup()
         require("mason-lspconfig").setup({
             ensure_installed = {
+                'lua_ls',
                 --'tsserver',
                 --'intelephense',
-                --'rust_analyzer',
                 'gopls',
                 --'sqlls',
-                --'stimulus_ls',
-                --'templ',
                 --'clangd',
             },
 
             handlers = {
-                function(server_name) -- default handler (optional)
+                -- default handler
+                function(server_name)
                     require("lspconfig")[server_name].setup {
                         capabilities = capabilities
+                    }
+                end,
+
+                ["gopls"] = function()
+                    require("lspconfig").gopls.setup {
+                        capabilities = capabilities,
+                        settings = {
+                            gopls = {
+                                completeUnimported = true,
+                                usePlaceholders = true,
+                                analyses = {
+                                    unusedparams = true,
+                                    shadow = true,
+                                },
+                                staticcheck = true,
+                                gofumpt = true,
+                            },
+                        },
                     }
                 end,
             }
