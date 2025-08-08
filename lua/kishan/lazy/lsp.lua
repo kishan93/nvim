@@ -33,7 +33,7 @@ return {
                 'intelephense',
                 'gopls',
                 --'sqlls',
-                --'clangd',
+                'clangd',
             },
 
             handlers = {
@@ -58,6 +58,16 @@ return {
                                 staticcheck = true,
                                 gofumpt = true,
                             },
+                        },
+                    }
+                end,
+
+                ["clangd"] = function()
+                    require("lspconfig").clangd.setup {
+                        capabilities = capabilities,
+                        cmd = {
+                            "clangd",
+                            "--query-driver=/usr/bin/arm-none-eabi-g*"
                         },
                     }
                 end,
